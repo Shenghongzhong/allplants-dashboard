@@ -253,15 +253,6 @@ graph_card_5= dbc.Card([
                                     style=style_image
                             ),
                             html.Br(),
-                            dash_table.DataTable(
-                                    id='br_tr_table',
-                                    columns=[{"name": i, "id": i} 
-                                            for i in br_tr_table.columns],
-                                    data=br_tr_table.to_dict('records'),
-                                    style_cell=dict(textAlign='left',backgroundColor="#8AC6BD"),
-                                    style_header=dict(backgroundColor="#BE4427",color="#EAF2F1",textAlign='center'),
-                                    style_data=dict(color="#EAF2F1")
-                                ),
                             html.Br(),
                             html.P("Personally, I'd think I should compare the products to `BREAKFAST` or `TREAT`",
                                     className="card-text",
@@ -314,7 +305,28 @@ graph_card_5= dbc.Card([
                                     style_cell=dict(textAlign='left',backgroundColor="#8AC6BD"),
                                     style_header=dict(backgroundColor="#38786D",color="#EAF2F1",textAlign='center'),
                                     style_data=dict(color="#323A39")
-                                )
+                                ),
+                            html.Br(),
+                            html.Div(children=[
+                                html.P("Since we only have data about revenue, we can get a figure by subtracting gross revenue from the product of the total sales multiplying the total items. However, I couldn't tell what the figure was, but my guess would be profit. I could be wrong because prices and costs are two unknown variables. So I would need more information and data about price and cost to give a better conclusion.",
+                                    className="card-text",
+                                    style=analysis_text_style),
+                                html.P("Yet, I was confused by seeing BANOFFEE_1 and FONDANT_1 have really low numbers of 0.10 and 0.08, respectively. Are they really that cheap, and the profit margins are so low for each item sold at Allplants.",
+                                        className="card-text",
+                                        style=analysis_text_style
+                                    ),
+                                html.P("In Sainsbury, Croissant, Pain Au Chocolat, Pain Au Raisins are sold at 80P",
+                                        className="card-text",  
+                                        style=analysis_text_style),
+                                html.P("At Allplants, the product option is usually selling in buddle. For prices, I would recommend we can price new products from the maximum of £4 to the minimum of £0.8 if a customer decide to add these treats to the product buddle.",
+                                        className="card-text",
+                                        style=analysis_text_style),
+                                html.H1('Thank You!',
+                                        style={
+                                            'text-align':"center",
+                                            'font-size':'144px'})
+                                    ])
+
 
 
 
@@ -374,11 +386,24 @@ app.layout = html.Div(
                                 ),
             style = {'margin':'0px 10px 10px 190px'}
         ),
-        html.Span(children=[
-            f'Prepared:{datetime.now().date()}',
-            " by ", html.B('David Zhong,  '),
-            html.P('Data Scientist')
-        ])
+        html.Section(children=[
+            'Created:08/10/2021',
+            " by ", html.B('David Zhong',style={'text-align':'center'}),
+            html.Br(),
+            html.Div(children=[html.A("Twitter  ",href='https://twitter.com/ShenghongZhong',style={'white-space':'pre'}),
+                        html.A("LinkedIn  ",href='https://www.linkedin.com/in/shenghongzhong',style={'white-space':'pre'}),
+                        html.A('Medium  ',href='https://davidshenghongzhong.medium.com',style={'white-space':'pre'}),
+                        html.A('Github  ',href='https://github.com/Shenghongzhong',style={'white-space':'pre'})],
+                        style={
+                            'margin':'5px 5 px 5px'
+                        })
+        
+            
+
+        ],
+        style={
+            'text-align':'center'
+        })
     ]
 )
 
