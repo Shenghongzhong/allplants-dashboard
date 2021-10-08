@@ -12,6 +12,7 @@ import dash_table
 
 
 app = dash.Dash(__name__,external_stylesheets = [dbc.themes.BOOTSTRAP])
+server =app.server
 #load_figure_template("lux")
 card_1 = dbc.Card(
     [dbc.CardHeader(" Total Revenues", 
@@ -415,5 +416,5 @@ app.layout = html.Div(
 
 
 if __name__ == '__main__':
-    server=app.server
+    
     app.run_server(debug=True)
