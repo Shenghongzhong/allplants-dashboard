@@ -327,11 +327,7 @@ graph_card_5= dbc.Card([
                                         style=analysis_text_style),
                                 html.P("At Allplants, the product option is usually selling in buddle. For prices, I would recommend we can price new products from the maximum of £4 to the minimum of £0.8 if a customer decide to add these treats to the product buddle.",
                                         className="card-text",
-                                        style=analysis_text_style),
-                                html.H1('Thank You!',
-                                        style={
-                                            'text-align':"center",
-                                            'font-size':'144px'})
+                                        style=analysis_text_style)
                                     ])
 
 
@@ -344,6 +340,41 @@ graph_card_5= dbc.Card([
                                     
                                     ])])
 
+graph_card_6= dbc.Card([
+                        dbc.CardHeader("Summary",
+                                        style={'colour':'#273A37',
+                                                "font-size": "56px",
+                                                'height':'120px',
+                                                'font-weight': '500'}),
+                        dbc.CardBody([
+                            html.Div(
+                                children=[ 
+                                    html.P(
+                                            "In this dataset, we can see the order performance of Allplants is positive. The total revenue of the 1st time orders in Sep 2020 was the best month compared with the other two months, demonstrating that the conversation rate was the strongest. To achieve sustainable and long-term development, I highly recommend that we learn from data by investigating what went well in Sep 2020."
+                                                ,className="card-text",
+                                                style=analysis_text_style),
+                                    html.P(
+                                            "On the other hand, customer(55873) was the loyal customer who purchased the most orders in this sample dataset. I wondered if we could get details about customer 55873; it allows us to profile the loyal customer and understand customer behaviour. It'd be helpful for marketing and target advertising on social media platforms.",
+                                            className="card-text",
+                                            style=analysis_text_style),
+                                    html.Br(),
+                                    html.P(
+                                        "Last but not least, I would like to have more data about costs and prices to give a better conclusion. However, whether launching Croissant, Pain Au Chocolat, and Pain Au Raisins is a good idea or not remains a concern, because our primary product strategy is focusing on meals rather than product types of breakfast and treat. The pricing strategy could be from £0.8 to £4 without considering costs, which is most likely an inaccurate guess from comparing with the same products in Sainsbury's and our sales of similar taste products.",
+                                        className="card-text",
+                                        style=analysis_text_style),
+                                    html.H1('Thank You!',
+                                                style={
+                                                        'text-align':"center",
+                                                        'font-size':'144px'})
+                                        ])
+                                    ])
+                    
+                                                
+])
+                 
+                
+                                 
+                            
 app.layout = html.Div(
     children =[
         html.Img(src='data:image/png;base64,{}'.format(logo_base64),
@@ -382,7 +413,10 @@ app.layout = html.Div(
                                 dbc.CardDeck([graph_card_4]),
                                 html.Br(),
                                 html.Br(),
-                                dbc.CardDeck([graph_card_5])
+                                dbc.CardDeck([graph_card_5]),
+                                html.Br(),
+                                html.Br(),
+                                dbc.CardDeck([graph_card_6])
                                             ],
                                                 width=10
                                             )
