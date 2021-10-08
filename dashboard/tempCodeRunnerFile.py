@@ -1,2 +1,1 @@
-
-        'font-weight': '500'}), 
+EAF2F1

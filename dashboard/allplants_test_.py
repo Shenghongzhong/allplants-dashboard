@@ -90,6 +90,7 @@ import plotly.express as px
 from datetime import datetime
 from urllib.request import urlretrieve
 
+
 """I created two gists for storing data so we can save the hustles and do analysis straightforwardly."""
 
 # Download data
@@ -349,7 +350,7 @@ output_df = product_types_df.sort_values('item_quantity',ascending=True)
 product_types_df
 
 # Plot Bar Chart
-question_fig_3_a = make_hor_bar(
+question_fig_4_a = make_hor_bar(
                                 output_df,
                                 'item_quantity',
                                 'product_type',
@@ -391,14 +392,14 @@ I was interested to see how other product structure at Allplants related to the 
 # Exclude Meal to see componetns of other product
 no_meal_sku_code_df = sku_code_df[sku_code_df['product_type'] != 'MEAL']
 
-question_fig_3_b = px.bar(data_frame=no_meal_sku_code_df , 
+question_fig_4_b = px.bar(data_frame=no_meal_sku_code_df , 
              x='product_type',
              y='item_quantity',
              hover_data =['product_type','sku_code','item_quantity'],
              color='sku_code')
 
 
-question_fig_3_b.update_layout(
+question_fig_4_b.update_layout(
                   title ='Total number of dishes ordered by customer(55873)',
                   xaxis_title = 'the Numbers of dishs',
                   yaxis_title = 'Dishes'
@@ -460,7 +461,9 @@ Personally, I'd think I should compare the products to `BREAKFAST` or `TREAT`.
 Let's look at products under these 2 product types"""
 
 # View the table of 2 BREAKFAST & TREAT
-order_items[(order_items['product_type']=='BREAKFAST') | (order_items['product_type']=='TREAT')]
+br_tr_table = order_items[(order_items['product_type']=='BREAKFAST') | (order_items['product_type']=='TREAT')]
+
+
 
 # View BREAKFAST by product
 order_items[order_items['product_type']=='BREAKFAST']['sku_code'].unique()
@@ -489,7 +492,7 @@ results_df = pd.DataFrame(results_list,index=product_list).rename(columns={0:'Sa
 results_df['Weekly Average Sales'] = results_df['Sales']/nums_weeks
 # Visualize results
 
-question_fig_4 = make_hor_bar(
+question_fig_5 = make_hor_bar(
                         results_df,
                         'Weekly Average Sales',
                         results_df.index,
@@ -513,11 +516,12 @@ $$ \text{Profits Per Unit}= \frac{\text{Gross Revenue}}{\text{Total Number of It
 """
 
 # revenues
-#revenue_product = merged_df.groupby('sku_code')['gross_revenue','item_quantity'].sum()
-#target_products_df = revenue_product.loc[product_list]
-#revenue_df = results_df.join(target_products_df,on=results_df.index)
-#revenue_df['Profits Per Unit'] = revenue_df['gross_revenue']/(revenue_df['Sales']*revenue_df['Sales'])
-#revenue_df
+revenue_product = merged_df.groupby('sku_code')['gross_revenue','item_quantity'].sum()
+target_products_df = revenue_product.loc[product_list]
+revenue_df = results_df.join(target_products_df,on=results_df.index)
+revenue_df['Profits Per Unit'] = revenue_df['gross_revenue']/(revenue_df['Sales']*revenue_df['Sales'])
+revenue_tb = revenue_df.sort_values('Sales',ascending=False).reset_index().rename(columns={'index':'Product_type'})
+
 
 """Since we only have data about revenue, we can get a figure by subtracting gross revenue from the product of the total sales multiplying the total items. However, I couldn't tell what the figure was, but my guess would be profit. I could be wrong because prices and costs are two unknown variables. So I would need more information and data about price and cost to give a better conclusion.
 
