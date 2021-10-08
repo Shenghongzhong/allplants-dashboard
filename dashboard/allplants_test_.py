@@ -9,10 +9,7 @@ Original file is located at
 
 # Jovian Commit Essentials
 # Please retain and execute this cell without modifying the contents for `jovian.commit` to work
-!pip install jovian --upgrade -q
-import jovian
-jovian.set_project('allplants-test')
-jovian.set_colab_id('12bgEoJq2t6Af4STX4RQyP-uekX1NWRMU')
+
 
 """# Allplants Test Interview
 
@@ -85,18 +82,18 @@ Please show any working/evidence to support assumptions where you can.
 > `pip` stands for `Python Install Packages`
 """
 
-# Install packages we want
-!pip install pandas numpy plotly matplotlib --quiet
-
 # Import Packages
+import ssl
 import pandas as pd
 import numpy as np
 import plotly.express as px
+from datetime import datetime
 from urllib.request import urlretrieve
 
 """I created two gists for storing data so we can save the hustles and do analysis straightforwardly."""
 
 # Download data
+ssl._create_default_https_context = ssl._create_unverified_context
 orders_url = 'https://gist.githubusercontent.com/Shenghongzhong/a70c0c8fffb44a37f31649a75152c0a5/raw/cd5c5830f1052c721e709ef9687701f266648128/allplants-orders'
 order_items_url = 'https://gist.githubusercontent.com/Shenghongzhong/65d238836ed7e04624e1e527397c2fdb/raw/c50aa269338f0c9e08d0d8fa68d8785800f26262/allplants_order_items'
 
@@ -137,8 +134,8 @@ For the order table, columns are as follows:
 # First glance at the 
 order_infor.head()
 
-rows, cols = order_infor.shape
-print('For order information table, we have {} rows, {} columns'.format(rows,cols))
+#rows, cols = order_infor.shape
+#print('For order information table, we have {} rows, {} columns'.format(rows,cols))
 
 """### Order Items Table
 
@@ -154,13 +151,17 @@ print('For order information table, we have {} rows, {} columns'.format(rows,col
 
 order_items.head()
 
-rows, cols = order_items.shape
-print('For order items table, we have {} rows, {} columns'.format(rows,cols))
+#rows, cols = order_items.shape
+#print('For order items table, we have {} rows, {} columns'.format(rows,cols))
 
 """### Working with dates"""
 
 # Convert date to datetime data type
 order_infor['placed_date'] = pd.to_datetime(order_infor['placed_date'])
+order_infor['year'] = pd.DatetimeIndex(order_infor.placed_date).year
+order_infor['month'] = pd.DatetimeIndex(order_infor.placed_date).month
+order_infor['day'] = pd.DatetimeIndex(order_infor.placed_date).day
+order_infor['weekday'] = pd.DatetimeIndex(order_infor.placed_date).weekday
 
 """### Helper functions"""
 
@@ -216,33 +217,33 @@ def compare_product(product):
 # See range of order number
 order_number_list = sorted(order_infor.order_number.unique())
 
-print(" For order numbers, we have the minimum order number of {}, whereas the maximum is {}".format(order_number_list[0],order_number_list[-1]))
+#print(" For order numbers, we have the minimum order number of {}, whereas the maximum is {}".format(order_number_list[0],order_number_list[-1]))
 
 
 # Filter out the first order
 first_order = order_infor[order_infor['order_number'] == 1]
 
 # Group By to see monthly revenue
-revenue_each_month = first_order.groupby('month')[['gross_revenue']].sum().reset_index().sort_values('gross_revenue',ascending=True)
+revenue_each_month = first_order.groupby(['month'])[['gross_revenue']].sum().reset_index().sort_values('gross_revenue',ascending=True)
 revenue_each_month ['%'] = revenue_each_month['gross_revenue']/order_infor['gross_revenue'].sum()
 
 
 revenue_each_month.style.format({'gross_revenue': "{:.2f}",'%': "{:.2%}"})
 
 # See Helper Functions Section
-fig = make_hor_bar(revenue_each_month,
+question_fig_1 = make_hor_bar(revenue_each_month,
                    'gross_revenue',
                    'month',
                    ['month','gross_revenue','%'],
                    'Total Revenues from 1st Order Each Month',
                    'Gross Revenue',
                    'Months',
-                   'dark',
+                   None,
                    y_is_category=True)
 
-fig.show()
+#fig.show()
 
-revenue_each_month['gross_revenue'].mean()
+revenue_each_month_avg = revenue_each_month['gross_revenue'].mean()
 
 """### Analysis
 Each month, we had approximately £45K from the first time order from 3rd Aug to 4th Oct. However, we had the highest number of first time orders in Sep 2020, in which we generated £75.67K, accounting for 14.84% of the total revenue given the dataset. We can investigate reasons why there was an increase. I reckoned maybe Allplants implemented new advertising strategies that brought more new customers.
@@ -265,19 +266,19 @@ top_ten_customers['categories'] = customers
 top_ten_customers.set_index('categories',inplace=True)
 
 # Plot the top 10 customers who ordered the most
-fig = make_hor_bar(top_ten_customers,
+question_fig_2 = make_hor_bar(top_ten_customers,
                    'counts',
                    top_ten_customers.index,
                    ['customer_id','counts'],
                    'Total order number by customer',
                    'Order Numbers',
                    'Customers',
-                   'dark',
+                   None,
                    y_is_category=True)
 
-fig.show()
+#fig.show()
 
-order_infor[order_infor['customer_id']==55873]['order_number'].max()
+max_order_mvp = order_infor[order_infor['customer_id']==55873]['order_number'].max()
 
 """#### Analysis
 
@@ -295,7 +296,7 @@ I'd like to ask questions about the behaviours of the customer. Could we create 
 
 total_types = order_items.sku_code.nunique()
 
-print('There are {} types of dish in total'.format(total_types))
+#print('There are {} types of dish in total'.format(total_types))
 
 """In the dataset, the `sku_code` of `BOLOGNESE_1` is the most popular dish without considering a specific customer. 
 
@@ -313,9 +314,17 @@ top_ten_dishes = most_customer['sku_code'].value_counts().reset_index().rename(c
 top_ten_dishes =top_ten_dishes.sort_values('counts',ascending=True)
 
 # Visualize the data
-fig = make_hor_bar(top_ten_dishes,'counts','sku_code',['sku_code','counts'],'Total Number of Dishes Ordered by Customer(55873)','The Number of Dishes','Dishes','dark',y_is_category=True)
+question_fig_3 = make_hor_bar(
+                    top_ten_dishes,
+                    'counts','sku_code',
+                    ['sku_code','counts'],
+                    'Total Number of Dishes Ordered by Customer(55873)',
+                    'The Number of Dishes',
+                    'Dishes',
+                    None,
+                    y_is_category=True)
 
-fig.show()
+#fig.show()
 
 """#### Analysis
 
@@ -340,8 +349,17 @@ output_df = product_types_df.sort_values('item_quantity',ascending=True)
 product_types_df
 
 # Plot Bar Chart
-fig = make_hor_bar(output_df,'item_quantity','product_type',['product_type','item_quantity'],'Total Number of Product Type','The Number of sku code','sku_code','dark',y_is_category=True)
-fig.show()
+question_fig_3_a = make_hor_bar(
+                                output_df,
+                                'item_quantity',
+                                'product_type',
+                                ['product_type','item_quantity'],
+                                'Total Number of Product Type',
+                                'The Number of sku code',
+                                'sku_code',
+                                None,
+                                y_is_category=True)
+#fig.show()
 
 """We know the `MEAL` is our key product line many customers purchased from the chart above. It is also not surprising to see `BREAKFAST` come after. It's fascinating to see `PIZZA` wasn't on the top 3, and I wondered if customers prefer to buy pizza from supermarkets because the pizza price is cheaper or more convenient
 
@@ -373,19 +391,19 @@ I was interested to see how other product structure at Allplants related to the 
 # Exclude Meal to see componetns of other product
 no_meal_sku_code_df = sku_code_df[sku_code_df['product_type'] != 'MEAL']
 
-fig = px.bar(data_frame=no_meal_sku_code_df , 
+question_fig_3_b = px.bar(data_frame=no_meal_sku_code_df , 
              x='product_type',
              y='item_quantity',
              hover_data =['product_type','sku_code','item_quantity'],
              color='sku_code')
 
 
-fig.update_layout(template='plotly_dark',
+question_fig_3_b.update_layout(
                   title ='Total number of dishes ordered by customer(55873)',
                   xaxis_title = 'the Numbers of dishs',
                   yaxis_title = 'Dishes'
                   )
-fig.show()
+#fig.show()
 
 """### Analysis
 
@@ -424,7 +442,7 @@ delta = order_infor['placed_date'].max()- order_infor['placed_date'].min()
 nums_weeks = delta.days/7
 
 weekly_average_sku = nums_sku/nums_weeks
-print('Every week there is the average of sales of sku_code is {:.2f} units"'.format(weekly_average_sku))
+#print('Every week there is the average of sales of sku_code is {:.2f} units"'.format(weekly_average_sku))
 
 """
 We know we have the average sales of 6,9K units of `sku_code`. That's our benchmark without considering any other factors such as product types, tastes, nutritions etc. 
@@ -471,7 +489,15 @@ results_df = pd.DataFrame(results_list,index=product_list).rename(columns={0:'Sa
 results_df['Weekly Average Sales'] = results_df['Sales']/nums_weeks
 # Visualize results
 
-make_hor_bar(results_df,'Weekly Average Sales',results_df.index,['Sales','Weekly Average Sales',results_df.index],"Weekly Average Sales by Similar Products (In Treat",'Total Sales','Products','dark',y_is_category=True)
+question_fig_4 = make_hor_bar(
+                        results_df,
+                        'Weekly Average Sales',
+                        results_df.index,
+                        ['Sales','Weekly Average Sales',results_df.index],
+                        "Weekly Average Sales by Similar Products (In Treat",'Total Sales',
+                        'Products',
+                        None,
+                        y_is_category=True)
 
 # View similar products by Sales
 results_df.sort_values('Sales',ascending=False).style.format({'Weekly Average Sales': "{:.2f}"})
@@ -487,11 +513,11 @@ $$ \text{Profits Per Unit}= \frac{\text{Gross Revenue}}{\text{Total Number of It
 """
 
 # revenues
-revenue_product = merged_df.groupby('sku_code')['gross_revenue','item_quantity'].sum()
-target_products_df = revenue_product.loc[product_list]
-revenue_df = results_df.join(target_products_df,on=results_df.index)
-revenue_df['Profits Per Unit'] = revenue_df['gross_revenue']/(revenue_df['Sales']*revenue_df['Sales'])
-revenue_df
+#revenue_product = merged_df.groupby('sku_code')['gross_revenue','item_quantity'].sum()
+#target_products_df = revenue_product.loc[product_list]
+#revenue_df = results_df.join(target_products_df,on=results_df.index)
+#revenue_df['Profits Per Unit'] = revenue_df['gross_revenue']/(revenue_df['Sales']*revenue_df['Sales'])
+#revenue_df
 
 """Since we only have data about revenue, we can get a figure by subtracting gross revenue from the product of the total sales multiplying the total items. However, I couldn't tell what the figure was, but my guess would be profit. I could be wrong because prices and costs are two unknown variables. So I would need more information and data about price and cost to give a better conclusion.
 
@@ -508,5 +534,4 @@ At Allplants, the product option is usually selling in buddle. For prices, I wou
 # Thank you!
 """
 
-jovian.commit()
 

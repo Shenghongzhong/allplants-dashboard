@@ -1,1 +1,2 @@
-auto
+
+        'font-weight': '500'}), 
