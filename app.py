@@ -357,7 +357,6 @@ graph_card_6= dbc.Card([
                                             "On the other hand, customer(55873) was the loyal customer who purchased the most orders in this sample dataset. I wondered if we could get details about customer 55873; it allows us to profile the loyal customer and understand customer behaviour. It'd be helpful for marketing and target advertising on social media platforms.",
                                             className="card-text",
                                             style=analysis_text_style),
-                                    html.Br(),
                                     html.P(
                                         "Last but not least, I would like to have more data about costs and prices to give a better conclusion. However, whether launching Croissant, Pain Au Chocolat, and Pain Au Raisins is a good idea or not remains a concern, because our primary product strategy is focusing on meals rather than product types of breakfast and treat. The pricing strategy could be from £0.8 to £4 without considering costs, which is most likely an inaccurate guess from comparing with the same products in Sainsbury's and our sales of similar taste products.",
                                         className="card-text",
