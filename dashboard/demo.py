@@ -122,6 +122,7 @@ graph_card_2= dbc.Card([dbc.CardHeader("2. Which customer (or customer id!) plac
             figure = question_fig_2),
             html.Div(
                 children=[
+                        html.H4('Analysis'),
                         html.P(
                             "To answer the question, the customer id (55873) ordered the most given the time."
                             "Given the sample dataset, the total number of customers placed was 11 orders. Presumably, the customer is a regular customer. The customer had purchased products at Allplants for the 30th time, from the 3rd of August to the 4th of October.",
@@ -152,6 +153,7 @@ graph_card_3= dbc.Card([
                 dbc.CardBody([
                                 dcc.Graph(figure = question_fig_3),
                                             html.Div(children=[
+                                                    html.H4('Analysis'),
                                                     html.P(
                                                             "The customer(55873) ordered serveral products the most such as CARBONARA_2, SHEPHERD_2, BANOFFEE_1,CRUMBLE_1,ORZO_2. The number of theses products is all 9. "
                                                             "make up the bulk of the card's content.",
@@ -181,7 +183,8 @@ graph_card_4= dbc.Card([
                 dbc.CardBody([
                     dcc.Graph(figure = question_fig_4_a),dcc.Graph(figure=question_fig_4_b),
                     html.Div(
-                        children=[                    
+                        children=[  
+                            html.H4('Analysis'),                  
                             html.P(
                                     "We know the MEAL is our key product line many customers purchased from the chart above. It is also not surprising to see BREAKFAST come after."
                                     "It's fascinating to see PIZZA wasn't on the top 3, and I wondered if customers prefer to buy pizza from supermarkets because the pizza price is cheaper or more convenient ",
@@ -212,7 +215,9 @@ graph_card_5= dbc.Card([
                             'font-weight': '500'}), 
                 dbc.CardBody([
                     html.Div(
-                        children=[                    
+                        
+                        children=[
+                            html.H4('Analysis'),              
                             html.P(
                                     "My first thought would be to frame this question in a slightly different way:"
                                     "What's the weekly average sales did we have for one unit of sku_code ?"
@@ -228,13 +233,13 @@ graph_card_5= dbc.Card([
                                     className="card-text",
                                     style=analysis_text_style),
                             html.Img(
-                                src='data:image/png;base64,{}'.format(formular_base64),
-                                style={
-                                        'display': 'block',
-                                        'margin': 'auto',
-                                        'width': '50%'
-                                }
-                                    ),
+                                        src='data:image/png;base64,{}'.format(formular_base64),
+                                        style={
+                                                'display': 'block',
+                                                'margin': 'auto',
+                                                'width': '50%'
+                                        }
+                                            ),
                             html.Br(),
                             html.P(
                                     "We know we have the average sales of 6,9K units of sku_code. That's our benchmark without considering any other factors such as product types, tastes, nutritions etc.",
@@ -272,6 +277,7 @@ graph_card_5= dbc.Card([
                                     ,
                                     style=style_image
                             ),
+                            html.Br(),
                             html.P("Having looked at these products, I would select BANOFFEE_1, FONDANT_1, TR_TIRAMISU_1 regarding my personal tastes."
                                     "They're approximately close to the new products we're going to launch."
                                     "However, the breakfast are more smoothie-base food.",
